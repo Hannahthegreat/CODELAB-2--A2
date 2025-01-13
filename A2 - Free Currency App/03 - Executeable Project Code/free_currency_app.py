@@ -79,7 +79,7 @@ class StartPage(ctk.CTkFrame):
         self.controller = controller
 
         #Logo on Upper Right
-        my_image = ctk.CTkImage(light_image=Image.open('img/freecurrencyapi.png'), size=(260, 30))
+        my_image = ctk.CTkImage(light_image=Image.open('A2 - Free Currency App/03 - Executeable Project Code/freecurrencyapi.png'), size=(260, 30))
         self.image = my_image  # Keep a reference
 
         image_label = ctk.CTkLabel(self, image=my_image, text="")
@@ -141,7 +141,7 @@ class MenuPage(ctk.CTkFrame):
         self.controller = controller
 
         #Logo on Upper Right
-        my_image = ctk.CTkImage(light_image=Image.open('img/freecurrencyapi.png'), size=(260, 30))
+        my_image = ctk.CTkImage(light_image=Image.open('A2 - Free Currency App/03 - Executeable Project Code/freecurrencyapi.png'), size=(260, 30))
         self.image = my_image  # Keep a reference
 
         image_label = ctk.CTkLabel(self, image=my_image, text="")
@@ -222,7 +222,7 @@ class QuickConvertPage(CurrencyPage):
         super().__init__(parent, controller)
 
 
-        my_image = ctk.CTkImage(light_image=Image.open('img/freecurrencyapi.png'), size=(260, 30))
+        my_image = ctk.CTkImage(light_image=Image.open('A2 - Free Currency App/03 - Executeable Project Code/freecurrencyapi.png'), size=(260, 30))
         self.image = my_image  # Keep a reference
 
         image_label = ctk.CTkLabel(self, image=my_image, text="")
@@ -363,7 +363,7 @@ class ExchangeRatesPage(CurrencyPage):
         super().__init__(parent, controller)
 
 
-        my_image = ctk.CTkImage(light_image=Image.open('img/freecurrencyapi.png'), size=(260, 30))
+        my_image = ctk.CTkImage(light_image=Image.open('A2 - Free Currency App/03 - Executeable Project Code/freecurrencyapi.png'), size=(260, 30))
         self.image = my_image  # Keep a reference
 
         image_label = ctk.CTkLabel(self, image=my_image, text="")
@@ -469,7 +469,7 @@ class CurrencyDictionaryPage(CurrencyPage):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
-        my_image = ctk.CTkImage(light_image=Image.open('img/freecurrencyapi.png'), size=(260, 30))
+        my_image = ctk.CTkImage(light_image=Image.open('A2 - Free Currency App/03 - Executeable Project Code/freecurrencyapi.png'), size=(260, 30))
         self.image = my_image  # Keep a reference
 
         image_label = ctk.CTkLabel(self, image=my_image, text="")
