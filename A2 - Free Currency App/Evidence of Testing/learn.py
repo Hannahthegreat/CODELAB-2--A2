@@ -56,3 +56,6 @@ def show_info():
 # show_currencies()
 print_dict_keys()
 show_info()
+
+
+# Tested different methodologies crafting functionality in learn.py file-----------------------------------------
