@@ -21,7 +21,7 @@ class App(ctk.CTk):
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
 
-        # Create pages
+        # This loop creates instances of different page classes defined further down. 
         self.frames = {}
         for F in (StartPage, MenuPage, QuickConvertPage, ExchangeRatesPage, CurrencyDictionaryPage):
             page_name = F.__name__
@@ -39,31 +39,30 @@ class App(ctk.CTk):
 
 # api functions ----------------------------------------------------------------------------
     
-    
+    # Retrieves Currency Data from the API (The value = currency code and the key = exhcange rate)
     def show_currencies(self):
         apikey = freecurrencyapi.Client('fca_live_UGsuYzak3zROde7EAjLjpqja3BGIYiOuBvoCqpO6')
         result = apikey.latest()
         return result['data']
-    
+    # Retrieves Currency Data from the API (Currency Information = Currency Code)
     def get_dict_keys(self):
         apikey = freecurrencyapi.Client('fca_live_UGsuYzak3zROde7EAjLjpqja3BGIYiOuBvoCqpO6')
         result = apikey.currencies()  # Fetch currency data
         return result['data']
 
-    
-        
-    
+# Currency Calculations Class ----------------------------------------------------------------------------
 class CurrencyPage(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, fg_color=("#fafafa", "#fafafa"))
         self.controller = controller
     
-
+    # Retrieves Currency Data from the API (The value = currency code and the key = exhcange rate)
     def get_exchange_rate(self, from_currency, to_currency):
         apikey = freecurrencyapi.Client('fca_live_UGsuYzak3zROde7EAjLjpqja3BGIYiOuBvoCqpO6')
         result = apikey.latest(base_currency=from_currency, currencies=[to_currency])
         return result['data'][to_currency]
-
+    
+    # Retrieves Currency Data from the API (Currency Information = Name, Symbol, Native Symbol, Plural Name)
     def show_dict_info(self, currency_code):
         apikey = freecurrencyapi.Client('fca_live_UGsuYzak3zROde7EAjLjpqja3BGIYiOuBvoCqpO6')
         result = apikey.currencies()  # Fetch currency data
@@ -113,6 +112,7 @@ class StartPage(ctk.CTkFrame):
             command=lambda: controller.show_frame("MenuPage")
         )
 
+        # Anchors it to the lower left position for consitency across all pages
         def update_button_position(event=None):
             start_button.place(x=50, y=self.winfo_height() - 70, anchor="sw")
 
@@ -121,7 +121,6 @@ class StartPage(ctk.CTkFrame):
 
 
         #Canvas Square Design
-
         canvas = ctk.CTkCanvas(self, width=300, height=450, bg="white", highlightthickness=0)  # Create a canvas for drawing
 
         # Draw a square on the canvas
@@ -133,7 +132,6 @@ class StartPage(ctk.CTkFrame):
 
 
 # ------------------------------------------------------------------------------------------
-
 # Define the Menu Page
 class MenuPage(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -155,7 +153,7 @@ class MenuPage(ctk.CTkFrame):
         menu_frame = ctk.CTkFrame(self, fg_color="transparent")
         menu_frame.place(relx=0.5, rely=0.5, anchor="center")
 
-        #Menu Button Styles
+        # Global Style - Menu Button Styles
         button_width = 200
         button_height = 50
         button_font = ("Arial", 15)
@@ -180,7 +178,6 @@ class MenuPage(ctk.CTkFrame):
 
 
         #Go Back Button
-
         back_button = ctk.CTkButton(
             master=self,
             text="Go Back",
@@ -196,6 +193,7 @@ class MenuPage(ctk.CTkFrame):
             command=lambda: controller.show_frame("StartPage")
         )
 
+        # Anchors it to the lower left position for consitency across all pages
         def update_button_position(event=None):
             back_button.place(x=50, y=self.winfo_height() - 70, anchor="sw")
 
@@ -204,7 +202,6 @@ class MenuPage(ctk.CTkFrame):
 
 
         #Canvas Square Design
-
         canvas = ctk.CTkCanvas(self, width=300, height=150, bg="white", highlightthickness=0)  # Create a canvas for drawing
 
         # Draw a square on the canvas
@@ -215,7 +212,6 @@ class MenuPage(ctk.CTkFrame):
         canvas.place(relx=1, rely=0, anchor='ne')  # Use place to position it at the bottom right
 
 # ------------------------------------------------------------------------------------------     
-    
 # Define the Quick Convert Page
 class QuickConvertPage(CurrencyPage):
     def __init__(self, parent, controller):
@@ -255,9 +251,8 @@ class QuickConvertPage(CurrencyPage):
         }
 
 
-        
+        #This is a variable storing or retreiving the currency code from the dictionary of the show_currencies function  defined in the App base class
         currencies = list(self.controller.show_currencies().keys())
-        
         
         # From currency
         self.from_dropdown = ctk.CTkOptionMenu(input_frame, values=currencies, **dropdown_style, command=self.update_conversion)
@@ -283,48 +278,30 @@ class QuickConvertPage(CurrencyPage):
         # Initial conversion
         self.update_conversion()
 
-
+    # This Function gets the information from the dropdown and text field and converts the currency be retreiving the right exchange rate.
     def update_conversion(self, *args):
-        try:
+        try: #gets the input from the "form_dropdown" "to_dropdown" and the "from_text_field" (The currency codes and the base_amount) 
             from_currency = self.from_dropdown.get()
             to_currency = self.to_dropdown.get()
             amount = float(self.from_text_field.get() or 0)
-
+            
+            # Using the defined get_exchang_rate function from the CurrencyPage class 
+            # it calculates the converted amount by retrieveing the right exchange rate
             exchange_rate = self.get_exchange_rate(from_currency, to_currency)  # Use inherited method
             converted_amount = amount * exchange_rate
-
+            
+            #Prints the converted amount in the "to_text_field"
             self.to_text_field.delete(0, 'end')
             self.to_text_field.insert(0, f"{converted_amount:.2f}")
 
+            #Prints the exchange rate equivalent to 1 base currency in the "exchange_rate_label"
             self.exchange_rate_label.configure(text=f"1 {from_currency} = {exchange_rate:.4f} {to_currency}")
         except ValueError:
             # Handle invalid input
             self.to_text_field.delete(0, 'end')
             self.exchange_rate_label.configure(text="Invalid input")
         
-        # # From currency
-        # from_dropdown = ctk.CTkOptionMenu(input_frame, values=currencies, **dropdown_style)
-        # from_dropdown.set("USD")  # Set default value to USD
-        # from_dropdown.grid(row=0, column=0, padx=(0, 10), pady=(0, 30))
-
-        # from_text_field = ctk.CTkEntry(input_frame, **textfield_style)
-        # from_text_field.grid(row=0, column=1, pady=(0, 30))
-
-        # # To currency
-        # to_dropdown = ctk.CTkOptionMenu(input_frame, values=currencies, **dropdown_style)
-        # to_dropdown.set("USD")  # Set default value to USD
-        # to_dropdown.grid(row=1, column=0, padx=(0, 10))
-
-        # to_text_field = ctk.CTkEntry(input_frame, **textfield_style)
-        # to_text_field.grid(row=1, column=1)
-
-
-        # # Exchange Rate label
-        # exchange_rate = ctk.CTkLabel(input_frame, text="1 USD = 0.9675 EUR", text_color="black", font=("Arial", 20), wraplength=700, justify="center")
-        # exchange_rate.grid(row=2, column=0, columnspan=2, pady=(20, 0))
-
-
-
+        #Directs the user back to the Menu Page
         back_button = ctk.CTkButton(
             master=self,
             text="Go Back",
@@ -339,7 +316,7 @@ class QuickConvertPage(CurrencyPage):
             
             command=lambda: self.controller.show_frame("MenuPage")
         )
-
+        # Anchors it to the lower left position for consitency across all pages
         def update_button_position(event=None):
             back_button.place(x=50, y=self.winfo_height() - 70, anchor="sw")
 
@@ -357,6 +334,7 @@ class QuickConvertPage(CurrencyPage):
         # Place the canvas in the bottom-left corner
         canvas.place(relx=1, rely=0, anchor='ne')  # Use place to position it at the bottom right
 
+# ------------------------------------------------------------------------------------------
 # Define the Exchange Rates Page
 class ExchangeRatesPage(CurrencyPage):
     def __init__(self, parent, controller):
@@ -377,8 +355,7 @@ class ExchangeRatesPage(CurrencyPage):
         input_frame = ctk.CTkFrame(self, fg_color="transparent")
         input_frame.place(relx=0.5, rely=0.55, anchor="center")
 
-
-
+        # Common styles
         textfield_style = {
             "width": 500,
             "height": 50,
@@ -388,8 +365,6 @@ class ExchangeRatesPage(CurrencyPage):
             "text_color": "black"
         }
         
-        
-        # Common styles
         dropdown_style = {
             "width": 200,
             "height": 50,
@@ -399,6 +374,7 @@ class ExchangeRatesPage(CurrencyPage):
             "font": ("Arial", 15)
 }
 
+        #This is a variable storing or retreiving the currency code from the dictionary of the show_currencies function  defined in the App base class
         currencies = list(self.controller.show_currencies().keys())
         
         # Currency dropdown
@@ -413,8 +389,9 @@ class ExchangeRatesPage(CurrencyPage):
         self.exchange_rate_label = ctk.CTkLabel(input_frame, text="", text_color="black", font=("Arial", 20), wraplength=700, justify="center")
         self.exchange_rate_label.grid(row=2, column=0, columnspan=2, pady=(20, 0))
 
+    # This Function gets the information from the dropdown and text field and retrieves the right exchange rate.
     def update_exchange_rate(self, *args):
-        try:
+        try: 
             selected_currency = self.exchange_dropdown.get()
             exchange_rate = self.get_exchange_rate('USD', selected_currency)  # Use inherited method
 
@@ -463,7 +440,7 @@ class ExchangeRatesPage(CurrencyPage):
         # Place the canvas in the bottom-left corner
         canvas.place(relx=1, rely=0, anchor='ne')  # Use place to position it at the bottom right
 
-
+# ------------------------------------------------------------------------------------------
 # Define the Currency Dictionary Page
 class CurrencyDictionaryPage(CurrencyPage):
     def __init__(self, parent, controller):
