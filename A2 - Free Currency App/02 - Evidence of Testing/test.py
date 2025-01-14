@@ -17,3 +17,7 @@ for i in result:
     for j in i.items():
         print(j)
 
+
+
+
+# Methodology did not work------------------------------------------------------------
