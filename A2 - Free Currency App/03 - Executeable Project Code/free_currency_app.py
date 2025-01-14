@@ -549,13 +549,13 @@ class CurrencyDictionaryPage(CurrencyPage):
         canvas.place(relx=1, rely=0, anchor='ne')  # Use place to position it at the bottom right
 
 
-    # This function is a function 
+    # This function retrieves the data of each currency code by specific keys (name, symbol, native symbol, and plural name).
     def update_dict(self, *args):
         try:
             currency_code = self.exchange_dropdown.get()  # Get selected currency code from dropdown
             code, name, symbol, symbol_native, name_plural = self.show_dict_info(currency_code)  # Call show_dict_info
 
-            # Update your UI labels with the fetched information
+            # Update UI labels with the fetched information
             self.master_name.configure(text=f"{name}")
             self.name.configure(text=f"Name: {name}")
             self.symbol.configure(text=f"Symbol: {symbol}")
