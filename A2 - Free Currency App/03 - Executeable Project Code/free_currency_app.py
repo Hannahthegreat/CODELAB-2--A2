@@ -391,15 +391,17 @@ class ExchangeRatesPage(CurrencyPage):
 
     # This Function gets the information from the dropdown and text field and retrieves the right exchange rate.
     def update_exchange_rate(self, *args):
-        try: 
+        try: # gets data input in the exchange_dropdown as selected_currency, then uses the function of get_exchange_rate 
             selected_currency = self.exchange_dropdown.get()
             exchange_rate = self.get_exchange_rate('USD', selected_currency)  # Use inherited method
-
+            
+            # prints the exchange rate to the rate_text_field and sets it to read only
             self.rate_text_field.configure(state="normal")
             self.rate_text_field.delete(0, 'end')
             self.rate_text_field.insert(0, f"{exchange_rate:.4f}")
             self.rate_text_field.configure(state="readonly")
-
+            
+            #Prints the exchange rate equivalent to 1 USD in the "exchange_rate_label"
             self.exchange_rate_label.configure(text=f"1 USD = {exchange_rate:.4f} {selected_currency}")
         except Exception as e:
             print(f"Error updating exchange rate: {e}")
@@ -464,6 +466,7 @@ class CurrencyDictionaryPage(CurrencyPage):
         }
 
 
+        #This is a variable storing or retreiving the currency code from the dictionary of the get_dict_keys function  defined in the App base class
         currencies = list(self.controller.get_dict_keys().keys())
         
         # From currency
@@ -471,16 +474,16 @@ class CurrencyDictionaryPage(CurrencyPage):
         self.exchange_dropdown.set("EUR")
         self.exchange_dropdown.grid(row=2, column=1, padx=(50, 0), pady=(100, 0), sticky="w")
         
-        # Currency Information
+        # Create frame to place the currency information in
         dict_frame = ctk.CTkFrame(self, fg_color="white")
         dict_frame.grid(row=3, column=2, sticky="w", padx=10, pady=10)
 
-        # Tagline label
+        # Heading for Currency Displayed
         self.master_name = ctk.CTkLabel(dict_frame, text="", text_color="black", font=("Arial", 40, "bold"))
         self.master_name.grid(row=0, column=0, padx=50, pady=30, sticky="w")
 
 
-
+        # Common Style
         info_style = {
             "text_color":"black", 
             "font":("Arial", 30), 
@@ -545,7 +548,8 @@ class CurrencyDictionaryPage(CurrencyPage):
         # Place the canvas in the bottom-left corner
         canvas.place(relx=1, rely=0, anchor='ne')  # Use place to position it at the bottom right
 
-    
+
+    # This function is a function 
     def update_dict(self, *args):
         try:
             currency_code = self.exchange_dropdown.get()  # Get selected currency code from dropdown
