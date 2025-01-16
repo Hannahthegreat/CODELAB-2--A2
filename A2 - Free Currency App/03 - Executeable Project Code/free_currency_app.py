@@ -556,7 +556,7 @@ class CurrencyDictionaryPage(CurrencyPage):
             code, name, symbol, symbol_native, name_plural = self.show_dict_info(currency_code)  # Call show_dict_info
 
             # Update UI labels with the fetched information
-            self.master_name.configure(text=f"{name}")
+            self.master_name.configure(text=f"{code}")
             self.name.configure(text=f"Name: {name}")
             self.symbol.configure(text=f"Symbol: {symbol}")
             self.native_symbol.configure(text=f"Native Symbol: {symbol_native}")
