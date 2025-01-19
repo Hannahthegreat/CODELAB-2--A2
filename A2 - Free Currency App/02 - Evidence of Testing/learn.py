@@ -54,7 +54,7 @@ def show_info():
     
 # convert_usd_to_eur()
 # show_currencies()
-print_dict_keys()
+# print_dict_keys()
 show_info()
 
 
