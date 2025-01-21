@@ -77,7 +77,7 @@ class StartPage(ctk.CTkFrame):
         super().__init__(parent, fg_color=("#fafafa", "#fafafa"))
         self.controller = controller
 
-        #Logo on Upper Right
+        #Logo on Upper Right (Make sure the relative path of the image is correct.)
         my_image = ctk.CTkImage(light_image=Image.open('A2 - Free Currency App/03 - Executeable Project Code/freecurrencyapi.png'), size=(260, 30))
         self.image = my_image  # Keep a reference
 
